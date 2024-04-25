@@ -1,0 +1,663 @@
+
+Setting environment for using XAMPP for Windows.
+Dhe81@DESKTOP-3TF0251 c:\xampp
+# mysql -u root -p dbpegawai
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 16
+Server version: 10.4.28-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [dbpegawai]> use dbpegawai;
+Database changed
+MariaDB [dbpegawai]> create table divisi(
+    -> id int primary key auto_increment,
+    -> nama varchar(30) not null unique);
+ERROR 1050 (42S01): Table 'divisi' already exists
+MariaDB [dbpegawai]> desc divisi;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.021 sec)
+
+MariaDB [dbpegawai]> desc jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.023 sec)
+
+MariaDB [dbpegawai]> create table pegawai(
+    -> id int primary key auto_increment,
+    -> nip char(5) not null unique,
+    -> nama varchar(30) not null,
+    -> gender enum('laki-laki', 'perempuan') not null,
+    -> tmp_lahir varchar(30)not null,
+    -> tgl_lahir date not null,
+    -> iddivisi INT NOT NULL REFERENCES divisi(id),
+    -> idjabatan INT NOT NULL REFERENCES jabatan(id),
+    -> alamat  TEXT);
+Query OK, 0 rows affected (0.034 sec)
+
+MariaDB [dbpegawai]> desc pegawai;
++-----------+-------------------------------+------+-----+---------+----------------+
+| Field     | Type                          | Null | Key | Default | Extra          |
++-----------+-------------------------------+------+-----+---------+----------------+
+| id        | int(11)                       | NO   | PRI | NULL    | auto_increment |
+| nip       | char(5)                       | NO   | UNI | NULL    |                |
+| nama      | varchar(30)                   | NO   |     | NULL    |                |
+| gender    | enum('laki-laki','perempuan') | NO   |     | NULL    |                |
+| tmp_lahir | varchar(30)                   | NO   |     | NULL    |                |
+| tgl_lahir | date                          | NO   |     | NULL    |                |
+| iddivisi  | int(11)                       | NO   |     | NULL    |                |
+| idjabatan | int(11)                       | NO   |     | NULL    |                |
+| alamat    | text                          | YES  |     | NULL    |                |
++-----------+-------------------------------+------+-----+---------+----------------+
+9 rows in set (0.019 sec)
+
+MariaDB [dbpegawai]> show tables;
++---------------------+
+| Tables_in_dbpegawai |
++---------------------+
+| divisi              |
+| jabatan             |
+| pegawai             |
++---------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> insert into divisi values
+    -> ('','SDM'), ('','Keuangan'),('','Marketing'),('','IT');
+Query OK, 4 rows affected, 4 warnings (0.063 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+MariaDB [dbpegawai]> select * from divisi;
++----+-----------+
+| id | nama      |
++----+-----------+
+|  4 | IT        |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  1 | SDM       |
++----+-----------+
+4 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> insert into jabatan values
+    -> ('','Direktur'),('','Manajer'),('','Asisten Manajer'),('','Staff');
+Query OK, 4 rows affected, 4 warnings (0.005 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+MariaDB [dbpegawai]> select * from jabatan;
++----+-----------------+
+| id | nama            |
++----+-----------------+
+|  3 | Asisten Manajer |
+|  1 | Direktur        |
+|  2 | Manajer         |
+|  4 | Staff           |
++----+-----------------+
+4 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> insert into pegawai(
+    -> nip,nama,gender,tmp_lahir,tgl_lahir,iddivisi,idjabatan,alamat) VALUES
+    -> ('11111','Muhammad Kasim','Laki-Laki','Depok','2004-03-01',4,1,'Bekasi'),
+    -> ('11112','Aziz Santoso','Laki-Laki','Jakarta','1970-03-01',4,1,'Tangerang'),
+    -> ('11113','Faras Susanti','Perempuan','Bali','1972-03-01',4,3,'Jakarta'),
+    -> ('11114','Asep Saepulloh','Laki-Laki','Solo','1980-03-01',4,2,'Jakarta'),
+    -> ('11115','Ussy Silalatahi','Perempuan','Tangerang','1981-04-11',4,4,'Depok'),
+    -> ('11116','Siti Khorunnisa','Perempuan','Tangerang','1980-09-02',3,1,'Depok'),
+    -> ('11117','Ummi Nur jannah','Perempuan','Jakarta','1973-09-02',3,2,'Jakarta'),
+    -> ('11118','Barok Asep','Laki-Laki','Bandung','1974-09-02',3,2,'Depok'),
+    -> ('11119','Muhammad Arief','Laki-Laki','Bekasi','1980-09-02',3,3,'Depok'),
+    -> ('11120','Faris Sarah','Perempuan','Jakarta','1977-08-09',3,4,'Banten'),
+    -> ('11121','Ruqoyyah Saedi','Perempuan','Bali','1971-03-01',2,1,'Bali'),
+    -> ('11122','Bara Santoso','Laki-laki','Papua','1980-01-03',2,2,'Tangerang'),
+    -> ('11123','Jajang Jaenudin','Laki-laki','Bogor','1975-11-09',2,3,'Depok'),
+    -> ('11124','Alisa Natasya','Perempuan','Jakarta','1970-10-09',2,4,'Bekasi'),
+    -> ('11125','Muhammad Umar','Laki-Laki','Yaman','1979-08-12',2,4,'Bekasi'),
+    -> ('11126','Shelly Santoso','Perempuan','Medan','1979-09-11',1,1,'Bekasi'),
+    -> ('11127','Asep Mubarok','Laki-Laki','Aceh','1988-09-04',1,2,'Malang'),
+    -> ('11128','Siska Santoso','Perempuan','Bima','1988-09-04',1,2,'Malang'),
+    -> ('11129','Muhammad Thoha','Laki-Laki','Jakarta','1986-04-04',1,3,'Malang'),
+    -> ('11130','Aini Ainul Yaqin','Perempuan','Jakarta','1978-12-01',1,4,'Malang');
+Query OK, 20 rows affected (0.005 sec)
+Records: 20  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+------------------+-----------+-----------+------------+----------+-----------+-----------+
+| id | nip   | nama             | gender    | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    |
++----+-------+------------------+-----------+-----------+------------+----------+-----------+-----------+
+|  1 | 11111 | Muhammad Kasim   | laki-laki | Depok     | 2004-03-01 |        4 |         1 | Bekasi    |
+|  2 | 11112 | Aziz Santoso     | laki-laki | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |
+|  3 | 11113 | Faras Susanti    | perempuan | Bali      | 1972-03-01 |        4 |         3 | Jakarta   |
+|  4 | 11114 | Asep Saepulloh   | laki-laki | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |
+|  5 | 11115 | Ussy Silalatahi  | perempuan | Tangerang | 1981-04-11 |        4 |         4 | Depok     |
+|  6 | 11116 | Siti Khorunnisa  | perempuan | Tangerang | 1980-09-02 |        3 |         1 | Depok     |
+|  7 | 11117 | Ummi Nur jannah  | perempuan | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta   |
+|  8 | 11118 | Barok Asep       | laki-laki | Bandung   | 1974-09-02 |        3 |         2 | Depok     |
+|  9 | 11119 | Muhammad Arief   | laki-laki | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |
+| 10 | 11120 | Faris Sarah      | perempuan | Jakarta   | 1977-08-09 |        3 |         4 | Banten    |
+| 11 | 11121 | Ruqoyyah Saedi   | perempuan | Bali      | 1971-03-01 |        2 |         1 | Bali      |
+| 12 | 11122 | Bara Santoso     | laki-laki | Papua     | 1980-01-03 |        2 |         2 | Tangerang |
+| 13 | 11123 | Jajang Jaenudin  | laki-laki | Bogor     | 1975-11-09 |        2 |         3 | Depok     |
+| 14 | 11124 | Alisa Natasya    | perempuan | Jakarta   | 1970-10-09 |        2 |         4 | Bekasi    |
+| 15 | 11125 | Muhammad Umar    | laki-laki | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |
+| 16 | 11126 | Shelly Santoso   | perempuan | Medan     | 1979-09-11 |        1 |         1 | Bekasi    |
+| 17 | 11127 | Asep Mubarok     | laki-laki | Aceh      | 1988-09-04 |        1 |         2 | Malang    |
+| 18 | 11128 | Siska Santoso    | perempuan | Bima      | 1988-09-04 |        1 |         2 | Malang    |
+| 19 | 11129 | Muhammad Thoha   | laki-laki | Jakarta   | 1986-04-04 |        1 |         3 | Malang    |
+| 20 | 11130 | Aini Ainul Yaqin | perempuan | Jakarta   | 1978-12-01 |        1 |         4 | Malang    |
++----+-------+------------------+-----------+-----------+------------+----------+-----------+-----------+
+20 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> update pegawai
+    -> SET tmp_lahir = 'Bali', idjabatan = 4, alamat = 'Depok'
+    -> WHERE id IN (19,1,3,8,18);
+Query OK, 5 rows affected (0.003 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+MariaDB [dbpegawai]> delete from pegawai
+    -> ORDER BY id DESC
+    -> LIMIT 2;
+Query OK, 2 rows affected (0.003 sec)
+
+MariaDB [dbpegawai]> alter table pegawai
+    -> ADD COLUMN IF NOT EXISTS
+    -> berat_badan FLOAT NOT NULL;
+Query OK, 0 rows affected (0.009 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]>  UPDATE pegawai
+    -> SET berat_badan = FLOOR(RAND() * 80) + 40;
+Query OK, 18 rows affected (0.003 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+-----------------+-----------+-----------+------------+----------+-----------+-----------+-------------+
+| id | nip   | nama            | gender    | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan |
++----+-------+-----------------+-----------+-----------+------------+----------+-----------+-----------+-------------+
+|  1 | 11111 | Muhammad Kasim  | laki-laki | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |
+|  2 | 11112 | Aziz Santoso    | laki-laki | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |
+|  3 | 11113 | Faras Susanti   | perempuan | Bali      | 1972-03-01 |        4 |         4 | Depok     |          90 |
+|  4 | 11114 | Asep Saepulloh  | laki-laki | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |
+|  5 | 11115 | Ussy Silalatahi | perempuan | Tangerang | 1981-04-11 |        4 |         4 | Depok     |          76 |
+|  6 | 11116 | Siti Khorunnisa | perempuan | Tangerang | 1980-09-02 |        3 |         1 | Depok     |          94 |
+|  7 | 11117 | Ummi Nur jannah | perempuan | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta   |          41 |
+|  8 | 11118 | Barok Asep      | laki-laki | Bali      | 1974-09-02 |        3 |         4 | Depok     |          45 |
+|  9 | 11119 | Muhammad Arief  | laki-laki | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |
+| 10 | 11120 | Faris Sarah     | perempuan | Jakarta   | 1977-08-09 |        3 |         4 | Banten    |          52 |
+| 11 | 11121 | Ruqoyyah Saedi  | perempuan | Bali      | 1971-03-01 |        2 |         1 | Bali      |         117 |
+| 12 | 11122 | Bara Santoso    | laki-laki | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |
+| 13 | 11123 | Jajang Jaenudin | laki-laki | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |
+| 14 | 11124 | Alisa Natasya   | perempuan | Jakarta   | 1970-10-09 |        2 |         4 | Bekasi    |          93 |
+| 15 | 11125 | Muhammad Umar   | laki-laki | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |
+| 16 | 11126 | Shelly Santoso  | perempuan | Medan     | 1979-09-11 |        1 |         1 | Bekasi    |          58 |
+| 17 | 11127 | Asep Mubarok    | laki-laki | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |
+| 18 | 11128 | Siska Santoso   | perempuan | Bali      | 1988-09-04 |        1 |         4 | Depok     |          83 |
++----+-------+-----------------+-----------+-----------+------------+----------+-----------+-----------+-------------+
+18 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> lter table pegawai
+    -> ADD COLUMN IF NOT EXISTS
+    -> umur INT NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'lter table pegawai
+ADD COLUMN IF NOT EXISTS
+umur INT NOT NULL' at line 1
+MariaDB [dbpegawai]> alter table pegawai
+    -> ADD COLUMN IF NOT EXISTS
+    -> umur INT NOT NULL;
+Query OK, 0 rows affected (0.007 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> update pegawai
+    -> SET umur = FLOOR(RAND() * 40) + 30;
+Query OK, 18 rows affected (0.003 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> select * from pegawai;
++----+-------+-----------------+-----------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | gender    | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+-----------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  1 | 11111 | Muhammad Kasim  | laki-laki | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+|  2 | 11112 | Aziz Santoso    | laki-laki | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+|  3 | 11113 | Faras Susanti   | perempuan | Bali      | 1972-03-01 |        4 |         4 | Depok     |          90 |   55 |
+|  4 | 11114 | Asep Saepulloh  | laki-laki | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+|  5 | 11115 | Ussy Silalatahi | perempuan | Tangerang | 1981-04-11 |        4 |         4 | Depok     |          76 |   46 |
+|  6 | 11116 | Siti Khorunnisa | perempuan | Tangerang | 1980-09-02 |        3 |         1 | Depok     |          94 |   55 |
+|  7 | 11117 | Ummi Nur jannah | perempuan | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta   |          41 |   69 |
+|  8 | 11118 | Barok Asep      | laki-laki | Bali      | 1974-09-02 |        3 |         4 | Depok     |          45 |   32 |
+|  9 | 11119 | Muhammad Arief  | laki-laki | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |   42 |
+| 10 | 11120 | Faris Sarah     | perempuan | Jakarta   | 1977-08-09 |        3 |         4 | Banten    |          52 |   43 |
+| 11 | 11121 | Ruqoyyah Saedi  | perempuan | Bali      | 1971-03-01 |        2 |         1 | Bali      |         117 |   62 |
+| 12 | 11122 | Bara Santoso    | laki-laki | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+| 13 | 11123 | Jajang Jaenudin | laki-laki | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |   53 |
+| 14 | 11124 | Alisa Natasya   | perempuan | Jakarta   | 1970-10-09 |        2 |         4 | Bekasi    |          93 |   67 |
+| 15 | 11125 | Muhammad Umar   | laki-laki | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |   68 |
+| 16 | 11126 | Shelly Santoso  | perempuan | Medan     | 1979-09-11 |        1 |         1 | Bekasi    |          58 |   68 |
+| 17 | 11127 | Asep Mubarok    | laki-laki | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |   65 |
+| 18 | 11128 | Siska Santoso   | perempuan | Bali      | 1988-09-04 |        1 |         4 | Depok     |          83 |   54 |
++----+-------+-----------------+-----------+-----------+------------+----------+-----------+-----------+-------------+------+
+18 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> alter table pegawai
+    -> CHANGE COLUMN gender jenis_kelamin ENUM('Laki-Laki','Perempuan') NOT NULL;
+Query OK, 0 rows affected (0.007 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> select nip,nama,jenis_kelamin,alamat from pegawai;
++-------+-----------------+---------------+-----------+
+| nip   | nama            | jenis_kelamin | alamat    |
++-------+-----------------+---------------+-----------+
+| 11111 | Muhammad Kasim  | Laki-Laki     | Depok     |
+| 11112 | Aziz Santoso    | Laki-Laki     | Tangerang |
+| 11113 | Faras Susanti   | Perempuan     | Depok     |
+| 11114 | Asep Saepulloh  | Laki-Laki     | Jakarta   |
+| 11115 | Ussy Silalatahi | Perempuan     | Depok     |
+| 11116 | Siti Khorunnisa | Perempuan     | Depok     |
+| 11117 | Ummi Nur jannah | Perempuan     | Jakarta   |
+| 11118 | Barok Asep      | Laki-Laki     | Depok     |
+| 11119 | Muhammad Arief  | Laki-Laki     | Depok     |
+| 11120 | Faris Sarah     | Perempuan     | Banten    |
+| 11121 | Ruqoyyah Saedi  | Perempuan     | Bali      |
+| 11122 | Bara Santoso    | Laki-Laki     | Tangerang |
+| 11123 | Jajang Jaenudin | Laki-Laki     | Depok     |
+| 11124 | Alisa Natasya   | Perempuan     | Bekasi    |
+| 11125 | Muhammad Umar   | Laki-Laki     | Bekasi    |
+| 11126 | Shelly Santoso  | Perempuan     | Bekasi    |
+| 11127 | Asep Mubarok    | Laki-Laki     | Malang    |
+| 11128 | Siska Santoso   | Perempuan     | Depok     |
++-------+-----------------+---------------+-----------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE jenis_kelamin LIKE '%Laki-Laki';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  1 | 11111 | Muhammad Kasim  | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+|  2 | 11112 | Aziz Santoso    | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+|  8 | 11118 | Barok Asep      | Laki-Laki     | Bali      | 1974-09-02 |        3 |         4 | Depok     |          45 |   32 |
+|  9 | 11119 | Muhammad Arief  | Laki-Laki     | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |   42 |
+| 12 | 11122 | Bara Santoso    | Laki-Laki     | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+| 13 | 11123 | Jajang Jaenudin | Laki-Laki     | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |   53 |
+| 15 | 11125 | Muhammad Umar   | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |   68 |
+| 17 | 11127 | Asep Mubarok    | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |   65 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+9 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> Bye
+
+Dhe81@DESKTOP-3TF0251 c:\xampp
+# ;
+Dhe81@DESKTOP-3TF0251 c:\xampp
+# mysql -u root -p dbpegawai
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 17
+Server version: 10.4.28-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE jenis_kelamin = 'Laki-Laki';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  1 | 11111 | Muhammad Kasim  | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+|  2 | 11112 | Aziz Santoso    | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+|  8 | 11118 | Barok Asep      | Laki-Laki     | Bali      | 1974-09-02 |        3 |         4 | Depok     |          45 |   32 |
+|  9 | 11119 | Muhammad Arief  | Laki-Laki     | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |   42 |
+| 12 | 11122 | Bara Santoso    | Laki-Laki     | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+| 13 | 11123 | Jajang Jaenudin | Laki-Laki     | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |   53 |
+| 15 | 11125 | Muhammad Umar   | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |   68 |
+| 17 | 11127 | Asep Mubarok    | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |   65 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+9 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE iddivisi = 4 AND jenis_kelamin = 'Perempuan';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  3 | 11113 | Faras Susanti   | Perempuan     | Bali      | 1972-03-01 |        4 |         4 | Depok  |          90 |   55 |
+|  5 | 11115 | Ussy Silalatahi | Perempuan     | Tangerang | 1981-04-11 |        4 |         4 | Depok  |          76 |   46 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE iddivisi = (SELECT id FROM divisi WHERE nama = 'IT')
+    -> AND jenis_kelamin = 'Perempuan';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  3 | 11113 | Faras Susanti   | Perempuan     | Bali      | 1972-03-01 |        4 |         4 | Depok  |          90 |   55 |
+|  5 | 11115 | Ussy Silalatahi | Perempuan     | Tangerang | 1981-04-11 |        4 |         4 | Depok  |          76 |   46 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE umur > 30 AND tmp_lahir = 'Jakarta';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  2 | 11112 | Aziz Santoso    | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+|  7 | 11117 | Ummi Nur jannah | Perempuan     | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta   |          41 |   69 |
+| 10 | 11120 | Faris Sarah     | Perempuan     | Jakarta   | 1977-08-09 |        3 |         4 | Banten    |          52 |   43 |
+| 14 | 11124 | Alisa Natasya   | Perempuan     | Jakarta   | 1970-10-09 |        2 |         4 | Bekasi    |          93 |   67 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+4 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE iddivisi = 3 AND umur > 30 AND jenis_kelamin = 'Perempuan';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+|  6 | 11116 | Siti Khorunnisa | Perempuan     | Tangerang | 1980-09-02 |        3 |         1 | Depok   |          94 |   55 |
+|  7 | 11117 | Ummi Nur jannah | Perempuan     | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta |          41 |   69 |
+| 10 | 11120 | Faris Sarah     | Perempuan     | Jakarta   | 1977-08-09 |        3 |         4 | Banten  |          52 |   43 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    ->  WHERE nip = '11111';
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  1 | 11111 | Muhammad Kasim | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok  |          54 |   36 |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]>  select * from pegawai
+    -> WHERE jenis_kelamin = 'Laki-Laki';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  1 | 11111 | Muhammad Kasim  | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+|  2 | 11112 | Aziz Santoso    | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+|  8 | 11118 | Barok Asep      | Laki-Laki     | Bali      | 1974-09-02 |        3 |         4 | Depok     |          45 |   32 |
+|  9 | 11119 | Muhammad Arief  | Laki-Laki     | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |   42 |
+| 12 | 11122 | Bara Santoso    | Laki-Laki     | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+| 13 | 11123 | Jajang Jaenudin | Laki-Laki     | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |   53 |
+| 15 | 11125 | Muhammad Umar   | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |   68 |
+| 17 | 11127 | Asep Mubarok    | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |   65 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+9 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE nip IN('11111','11112','11113');
++----+-------+----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  1 | 11111 | Muhammad Kasim | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+|  2 | 11112 | Aziz Santoso   | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+|  3 | 11113 | Faras Susanti  | Perempuan     | Bali      | 1972-03-01 |        4 |         4 | Depok     |          90 |   55 |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> WHERE tmp_lahir NOT IN('Jakarta','Depok','Bali');
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+|  5 | 11115 | Ussy Silalatahi | Perempuan     | Tangerang | 1981-04-11 |        4 |         4 | Depok     |          76 |   46 |
+|  6 | 11116 | Siti Khorunnisa | Perempuan     | Tangerang | 1980-09-02 |        3 |         1 | Depok     |          94 |   55 |
+|  9 | 11119 | Muhammad Arief  | Laki-Laki     | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |   42 |
+| 12 | 11122 | Bara Santoso    | Laki-Laki     | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+| 13 | 11123 | Jajang Jaenudin | Laki-Laki     | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |   53 |
+| 15 | 11125 | Muhammad Umar   | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |   68 |
+| 16 | 11126 | Shelly Santoso  | Perempuan     | Medan     | 1979-09-11 |        1 |         1 | Bekasi    |          58 |   68 |
+| 17 | 11127 | Asep Mubarok    | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |   65 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+9 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> ORDER BY nama ASC;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| 14 | 11124 | Alisa Natasya   | Perempuan     | Jakarta   | 1970-10-09 |        2 |         4 | Bekasi    |          93 |   67 |
+| 17 | 11127 | Asep Mubarok    | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |   65 |
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+|  2 | 11112 | Aziz Santoso    | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+| 12 | 11122 | Bara Santoso    | Laki-Laki     | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+|  8 | 11118 | Barok Asep      | Laki-Laki     | Bali      | 1974-09-02 |        3 |         4 | Depok     |          45 |   32 |
+|  3 | 11113 | Faras Susanti   | Perempuan     | Bali      | 1972-03-01 |        4 |         4 | Depok     |          90 |   55 |
+| 10 | 11120 | Faris Sarah     | Perempuan     | Jakarta   | 1977-08-09 |        3 |         4 | Banten    |          52 |   43 |
+| 13 | 11123 | Jajang Jaenudin | Laki-Laki     | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |   53 |
+|  9 | 11119 | Muhammad Arief  | Laki-Laki     | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |   42 |
+|  1 | 11111 | Muhammad Kasim  | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+| 15 | 11125 | Muhammad Umar   | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |   68 |
+| 11 | 11121 | Ruqoyyah Saedi  | Perempuan     | Bali      | 1971-03-01 |        2 |         1 | Bali      |         117 |   62 |
+| 16 | 11126 | Shelly Santoso  | Perempuan     | Medan     | 1979-09-11 |        1 |         1 | Bekasi    |          58 |   68 |
+| 18 | 11128 | Siska Santoso   | Perempuan     | Bali      | 1988-09-04 |        1 |         4 | Depok     |          83 |   54 |
+|  6 | 11116 | Siti Khorunnisa | Perempuan     | Tangerang | 1980-09-02 |        3 |         1 | Depok     |          94 |   55 |
+|  7 | 11117 | Ummi Nur jannah | Perempuan     | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta   |          41 |   69 |
+|  5 | 11115 | Ussy Silalatahi | Perempuan     | Tangerang | 1981-04-11 |        4 |         4 | Depok     |          76 |   46 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+18 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> ORDER BY berat_badan DESC;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| 11 | 11121 | Ruqoyyah Saedi  | Perempuan     | Bali      | 1971-03-01 |        2 |         1 | Bali      |         117 |   62 |
+| 13 | 11123 | Jajang Jaenudin | Laki-Laki     | Bogor     | 1975-11-09 |        2 |         3 | Depok     |         116 |   53 |
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+| 17 | 11127 | Asep Mubarok    | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang    |         108 |   65 |
+|  6 | 11116 | Siti Khorunnisa | Perempuan     | Tangerang | 1980-09-02 |        3 |         1 | Depok     |          94 |   55 |
+| 14 | 11124 | Alisa Natasya   | Perempuan     | Jakarta   | 1970-10-09 |        2 |         4 | Bekasi    |          93 |   67 |
+|  3 | 11113 | Faras Susanti   | Perempuan     | Bali      | 1972-03-01 |        4 |         4 | Depok     |          90 |   55 |
+| 18 | 11128 | Siska Santoso   | Perempuan     | Bali      | 1988-09-04 |        1 |         4 | Depok     |          83 |   54 |
+|  5 | 11115 | Ussy Silalatahi | Perempuan     | Tangerang | 1981-04-11 |        4 |         4 | Depok     |          76 |   46 |
+| 15 | 11125 | Muhammad Umar   | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi    |          75 |   68 |
+|  2 | 11112 | Aziz Santoso    | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+| 12 | 11122 | Bara Santoso    | Laki-Laki     | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+|  9 | 11119 | Muhammad Arief  | Laki-Laki     | Bekasi    | 1980-09-02 |        3 |         3 | Depok     |          61 |   42 |
+| 16 | 11126 | Shelly Santoso  | Perempuan     | Medan     | 1979-09-11 |        1 |         1 | Bekasi    |          58 |   68 |
+|  1 | 11111 | Muhammad Kasim  | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+| 10 | 11120 | Faris Sarah     | Perempuan     | Jakarta   | 1977-08-09 |        3 |         4 | Banten    |          52 |   43 |
+|  8 | 11118 | Barok Asep      | Laki-Laki     | Bali      | 1974-09-02 |        3 |         4 | Depok     |          45 |   32 |
+|  7 | 11117 | Ummi Nur jannah | Perempuan     | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta   |          41 |   69 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    ->  LIMIT 5 OFFSET 0;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  1 | 11111 | Muhammad Kasim  | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok     |          54 |   36 |
+|  2 | 11112 | Aziz Santoso    | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+|  3 | 11113 | Faras Susanti   | Perempuan     | Bali      | 1972-03-01 |        4 |         4 | Depok     |          90 |   55 |
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta   |         109 |   48 |
+|  5 | 11115 | Ussy Silalatahi | Perempuan     | Tangerang | 1981-04-11 |        4 |         4 | Depok     |          76 |   46 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> ORDER BY berat_badan DESC
+    -> LIMIT 5 OFFSET 0;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| 11 | 11121 | Ruqoyyah Saedi  | Perempuan     | Bali      | 1971-03-01 |        2 |         1 | Bali    |         117 |   62 |
+| 13 | 11123 | Jajang Jaenudin | Laki-Laki     | Bogor     | 1975-11-09 |        2 |         3 | Depok   |         116 |   53 |
+|  4 | 11114 | Asep Saepulloh  | Laki-Laki     | Solo      | 1980-03-01 |        4 |         2 | Jakarta |         109 |   48 |
+| 17 | 11127 | Asep Mubarok    | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang  |         108 |   65 |
+|  6 | 11116 | Siti Khorunnisa | Perempuan     | Tangerang | 1980-09-02 |        3 |         1 | Depok   |          94 |   55 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> select * from pegawai
+    -> LIMIT 5 OFFSET 13;
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| 14 | 11124 | Alisa Natasya  | Perempuan     | Jakarta   | 1970-10-09 |        2 |         4 | Bekasi |          93 |   67 |
+| 15 | 11125 | Muhammad Umar  | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi |          75 |   68 |
+| 16 | 11126 | Shelly Santoso | Perempuan     | Medan     | 1979-09-11 |        1 |         1 | Bekasi |          58 |   68 |
+| 17 | 11127 | Asep Mubarok   | Laki-Laki     | Aceh      | 1988-09-04 |        1 |         2 | Malang |         108 |   65 |
+| 18 | 11128 | Siska Santoso  | Perempuan     | Bali      | 1988-09-04 |        1 |         4 | Depok  |          83 |   54 |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+5 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]>  select * from pegawai
+    -> ORDER BY berat_badan DESC
+    -> LIMIT 5 OFFSET 13;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| 16 | 11126 | Shelly Santoso  | Perempuan     | Medan     | 1979-09-11 |        1 |         1 | Bekasi  |          58 |   68 |
+|  1 | 11111 | Muhammad Kasim  | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok   |          54 |   36 |
+| 10 | 11120 | Faris Sarah     | Perempuan     | Jakarta   | 1977-08-09 |        3 |         4 | Banten  |          52 |   43 |
+|  8 | 11118 | Barok Asep      | Laki-Laki     | Bali      | 1974-09-02 |        3 |         4 | Depok   |          45 |   32 |
+|  7 | 11117 | Ummi Nur jannah | Perempuan     | Jakarta   | 1973-09-02 |        3 |         2 | Jakarta |          41 |   69 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+5 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai FROM pegawai;
++----------------+
+| jumlah_pegawai |
++----------------+
+|             18 |
++----------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]>  SELECT nip,nama,umur FROM pegawai WHERE umur =(SELECT MAX(umur) FROM pegawai);
++-------+-----------------+------+
+| nip   | nama            | umur |
++-------+-----------------+------+
+| 11117 | Ummi Nur jannah |   69 |
++-------+-----------------+------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT nip,nama,berat_badan FROM pegawai WHERE berat_badan =(SELECT MIN(berat_badan) FROM pegawai);
++-------+-----------------+-------------+
+| nip   | nama            | berat_badan |
++-------+-----------------+-------------+
+| 11117 | Ummi Nur jannah |          41 |
++-------+-----------------+-------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT AVG(umur) AS umur_rata2 FROM pegawai;
++------------+
+| umur_rata2 |
++------------+
+|    51.7778 |
++------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jml_manajer FROM pegawai
+    -> WHERE jenis_kelamin = 'Laki-Laki' AND umur > 40  AND idjabatan = 3;
++-------------+
+| jml_manajer |
++-------------+
+|           2 |
++-------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jml_staff_perempuan FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan' AND umur < 40  AND idjabatan = 4;
++---------------------+
+| jml_staff_perempuan |
++---------------------+
+|                   0 |
++---------------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jml_karyawan_perempuan FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan';
++------------------------+
+| jml_karyawan_perempuan |
++------------------------+
+|                      9 |
++------------------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT SUM(iddivisi) FROM pegawai WHERE iddivisi = 1;
++---------------+
+| SUM(iddivisi) |
++---------------+
+|             3 |
++---------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT SUM(CASE WHEN iddivisi = (SELECT iddivisi = 1) THEN 1 ELSE 0 END) AS jumlah_pegawai_SDM
+    -> FROM pegawai;
++--------------------+
+| jumlah_pegawai_SDM |
++--------------------+
+|                  3 |
++--------------------+
+1 row in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT iddivisi, COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> GROUP BY iddivisi;
++----------+----------------+
+| iddivisi | jumlah_pegawai |
++----------+----------------+
+|        1 |              3 |
+|        2 |              5 |
+|        3 |              5 |
+|        4 |              5 |
++----------+----------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]>  SELECT jenis_kelamin, COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    ->  GROUP BY jenis_kelamin
+    ->  HAVING COUNT(*) >= 10;
+Empty set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nama LIKE 'Muhammad%';
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  1 | 11111 | Muhammad Kasim | Laki-Laki     | Bali      | 2004-03-01 |        4 |         4 | Depok  |          54 |   36 |
+|  9 | 11119 | Muhammad Arief | Laki-Laki     | Bekasi    | 1980-09-02 |        3 |         3 | Depok  |          61 |   42 |
+| 15 | 11125 | Muhammad Umar  | Laki-Laki     | Yaman     | 1979-08-12 |        2 |         4 | Bekasi |          75 |   68 |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]>  select *
+    -> from pegawai
+    ->  WHERE nama LIKE '%Santoso';
++----+-------+----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat    | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+|  2 | 11112 | Aziz Santoso   | Laki-Laki     | Jakarta   | 1970-03-01 |        4 |         1 | Tangerang |          74 |   39 |
+| 12 | 11122 | Bara Santoso   | Laki-Laki     | Papua     | 1980-01-03 |        2 |         2 | Tangerang |          69 |   30 |
+| 16 | 11126 | Shelly Santoso | Perempuan     | Medan     | 1979-09-11 |        1 |         1 | Bekasi    |          58 |   68 |
+| 18 | 11128 | Siska Santoso  | Perempuan     | Bali      | 1988-09-04 |        1 |         4 | Depok     |          83 |   54 |
++----+-------+----------------+---------------+-----------+------------+----------+-----------+-----------+-------------+------+
+4 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    -> WHERE nama LIKE '__S%';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  5 | 11115 | Ussy Silalatahi | Perempuan     | Tangerang | 1981-04-11 |        4 |         4 | Depok  |          76 |   46 |
+| 18 | 11128 | Siska Santoso   | Perempuan     | Bali      | 1988-09-04 |        1 |         4 | Depok  |          83 |   54 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+2 rows in set (0.000 sec)
+
+MariaDB [dbpegawai]>  
